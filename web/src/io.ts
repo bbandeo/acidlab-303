@@ -16,7 +16,7 @@ export function jsonFile(bank: Bank): File {
   return new File([bankToJson(bank)], `${bank.name}.json`, { type: "application/json" });
 }
 
-function download(file: File): void {
+export function download(file: File): void {
   const url = URL.createObjectURL(file);
   const a = document.createElement("a");
   a.href = url;

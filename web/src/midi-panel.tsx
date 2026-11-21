@@ -1,24 +1,21 @@
 import { useState } from "preact/hooks";
 import type { Pattern, PatternKey } from "./domain";
-import { hex, midiFlagEnabled, midiSupported, openMidi, outputs, sendPattern, setMidiFlag } from "./midi";
+import { hex, midiSupported, openMidi, outputs, sendPattern } from "./midi";
 
 interface Props {
   pattern: Pattern;
   patternKey: PatternKey;
   onMessage: (t: string) => void;
   onError: (e: unknown) => void;
+  onClose: () => void;
 }
 
-/** Panel experimental: invisible salvo con ?experimental=midi o el toggle guardado. */
-export function MidiPanel({ pattern, patternKey, onMessage, onError }: Props) {
-  const [enabled, setEnabled] = useState(midiFlagEnabled);
+export function MidiPanel({ pattern, patternKey, onMessage, onError, onClose }: Props) {
   const [outs, setOuts] = useState<MIDIOutput[]>([]);
   const [outId, setOutId] = useState("");
   const [group, setGroup] = useState(0);
   const [slot, setSlot] = useState(0);
   const [last, setLast] = useState("");
-
-  if (!enabled) return null;
 
   async function connect() {
     try {
@@ -59,7 +56,7 @@ export function MidiPanel({ pattern, patternKey, onMessage, onError }: Props) {
         <>
           <div class="row wrap">
             <button onClick={connect}>Conectar</button>
-            <select value={outId} onChange={(e) => setOutId(e.currentTarget.value)} disabled={!outs.length}>
+            <select aria-label="Salida MIDI" value={outId} onChange={(e) => setOutId(e.currentTarget.value)} disabled={!outs.length}>
               {outs.map((o) => (
                 <option key={o.id} value={o.id}>
                   {o.name ?? o.id}
@@ -97,10 +94,7 @@ export function MidiPanel({ pattern, patternKey, onMessage, onError }: Props) {
       )}
       <button
         class="link small"
-        onClick={() => {
-          setMidiFlag(false);
-          setEnabled(false);
-        }}
+        onClick={onClose}
       >
         Ocultar panel MIDI
       </button>
