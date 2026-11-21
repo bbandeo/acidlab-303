@@ -1,0 +1,282 @@
+{
+  "version": 1,
+  "name": "a-minor-acid-techno",
+  "intent": "La menor natural, densidad 70%, acid techno",
+  "patterns": {
+    "A": {
+      "steps": [
+        {
+          "note": "A",
+          "octave": -1,
+          "accent": true
+        },
+        {
+          "note": "A"
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        },
+        {
+          "note": "C",
+          "slide": true
+        },
+        {
+          "note": "A",
+          "accent": true
+        },
+        {
+          "note": "E"
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        },
+        {
+          "note": "G",
+          "slide": true
+        },
+        {
+          "note": "A",
+          "octave": -1,
+          "accent": true
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        },
+        {
+          "note": "A"
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "E",
+          "gate": "tie"
+        },
+        {
+          "note": "A",
+          "accent": true
+        },
+        {
+          "note": "C",
+          "octave": 1,
+          "slide": true
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        }
+      ]
+    },
+    "B": {
+      "steps": [
+        {
+          "note": "A",
+          "octave": -1,
+          "accent": true
+        },
+        {
+          "note": "A"
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        },
+        {
+          "note": "C",
+          "slide": true
+        },
+        {
+          "note": "A",
+          "accent": true
+        },
+        {
+          "note": "E",
+          "octave": 1,
+          "accent": true
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        },
+        {
+          "note": "G",
+          "slide": true
+        },
+        {
+          "note": "A",
+          "octave": -1,
+          "accent": true
+        },
+        {
+          "note": "A"
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        },
+        {
+          "note": "F",
+          "slide": true
+        },
+        {
+          "note": "E",
+          "gate": "tie"
+        },
+        {
+          "note": "A",
+          "accent": true
+        },
+        {
+          "note": "C",
+          "octave": 1,
+          "slide": true
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        }
+      ]
+    },
+    "C": {
+      "steps": [
+        {
+          "note": "A",
+          "octave": -1,
+          "accent": true
+        },
+        {
+          "note": "A"
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        },
+        {
+          "note": "C",
+          "octave": 1,
+          "accent": true,
+          "slide": true
+        },
+        {
+          "note": "A",
+          "accent": true
+        },
+        {
+          "note": "E"
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        },
+        {
+          "note": "G",
+          "gate": "tie"
+        },
+        {
+          "note": "A",
+          "octave": -1,
+          "accent": true
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        },
+        {
+          "note": "A"
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "E",
+          "gate": "tie"
+        },
+        {
+          "note": "A",
+          "accent": true
+        },
+        {
+          "note": "D",
+          "octave": 1,
+          "accent": true
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        }
+      ]
+    },
+    "D": {
+      "steps": [
+        {
+          "note": "A",
+          "octave": -1,
+          "accent": true
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        },
+        {
+          "note": "B",
+          "slide": true
+        },
+        {
+          "note": "C",
+          "slide": true
+        },
+        {
+          "note": "A",
+          "accent": true
+        },
+        {
+          "note": "E"
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        },
+        {
+          "note": "G",
+          "slide": true
+        },
+        {
+          "note": "A",
+          "octave": -1,
+          "accent": true
+        },
+        {
+          "note": "A",
+          "gate": "off"
+        },
+        {
+          "note": "A"
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "E",
+          "accent": true
+        },
+        {
+          "note": "A",
+          "accent": true
+        },
+        {
+          "note": "C",
+          "octave": 1,
+          "slide": true
+        },
+        {
+          "note": "G",
+          "octave": -1,
+          "slide": true
+        }
+      ]
+    }
+  }
+}

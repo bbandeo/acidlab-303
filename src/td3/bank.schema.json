@@ -1,0 +1,155 @@
+{
+  "$defs": {
+    "Pattern": {
+      "additionalProperties": false,
+      "properties": {
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/Step"
+          },
+          "maxItems": 16,
+          "minItems": 16,
+          "title": "Steps",
+          "type": "array"
+        },
+        "length": {
+          "default": 16,
+          "ge": 1,
+          "le": 16,
+          "title": "Length",
+          "type": "integer"
+        },
+        "triplet": {
+          "default": false,
+          "title": "Triplet",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "steps"
+      ],
+      "title": "Pattern",
+      "type": "object"
+    },
+    "Patterns": {
+      "additionalProperties": false,
+      "properties": {
+        "A": {
+          "$ref": "#/$defs/Pattern"
+        },
+        "B": {
+          "$ref": "#/$defs/Pattern"
+        },
+        "C": {
+          "$ref": "#/$defs/Pattern"
+        },
+        "D": {
+          "$ref": "#/$defs/Pattern"
+        }
+      },
+      "required": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "title": "Patterns",
+      "type": "object"
+    },
+    "Step": {
+      "additionalProperties": false,
+      "properties": {
+        "note": {
+          "enum": [
+            "C",
+            "C#",
+            "D",
+            "D#",
+            "E",
+            "F",
+            "F#",
+            "G",
+            "G#",
+            "A",
+            "A#",
+            "B"
+          ],
+          "title": "Note",
+          "type": "string"
+        },
+        "octave": {
+          "default": 0,
+          "enum": [
+            -1,
+            0,
+            1
+          ],
+          "title": "Octave",
+          "type": "integer"
+        },
+        "accent": {
+          "default": false,
+          "title": "Accent",
+          "type": "boolean"
+        },
+        "slide": {
+          "default": false,
+          "title": "Slide",
+          "type": "boolean"
+        },
+        "gate": {
+          "default": "on",
+          "enum": [
+            "on",
+            "off",
+            "tie"
+          ],
+          "title": "Gate",
+          "type": "string"
+        }
+      },
+      "required": [
+        "note"
+      ],
+      "title": "Step",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "name": {
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "title": "Name",
+      "type": "string"
+    },
+    "intent": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Intent"
+    },
+    "patterns": {
+      "$ref": "#/$defs/Patterns"
+    }
+  },
+  "required": [
+    "version",
+    "name",
+    "patterns"
+  ],
+  "title": "Bank",
+  "type": "object"
+}

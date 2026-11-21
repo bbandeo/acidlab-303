@@ -1,0 +1,268 @@
+{
+  "version": 1,
+  "name": "f-phrygian-rominimal",
+  "intent": "Fa menor frigio, densidad 65%, Rominimal",
+  "patterns": {
+    "A": {
+      "steps": [
+        {
+          "note": "F"
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F",
+          "octave": 1,
+          "accent": true
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "F#",
+          "slide": true
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "G#",
+          "accent": true
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F",
+          "gate": "tie"
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "F#",
+          "octave": -1
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F",
+          "octave": 1,
+          "accent": true,
+          "slide": true
+        },
+        {
+          "note": "C"
+        }
+      ]
+    },
+    "B": {
+      "steps": [
+        {
+          "note": "F"
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "C#",
+          "accent": true
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F#",
+          "slide": true
+        },
+        {
+          "note": "G#"
+        },
+        {
+          "note": "F",
+          "octave": -1,
+          "accent": true
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "A#",
+          "slide": true
+        },
+        {
+          "note": "G#"
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        }
+      ]
+    },
+    "C": {
+      "steps": [
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F",
+          "octave": 1,
+          "accent": true
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F#"
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "D#",
+          "accent": true,
+          "slide": true
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F",
+          "octave": 1
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "C",
+          "accent": true
+        },
+        {
+          "note": "F",
+          "gate": "tie"
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        }
+      ]
+    },
+    "D": {
+      "steps": [
+        {
+          "note": "F",
+          "accent": true
+        },
+        {
+          "note": "F",
+          "gate": "tie"
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "G#",
+          "slide": true
+        },
+        {
+          "note": "A#",
+          "slide": true
+        },
+        {
+          "note": "C",
+          "octave": 1,
+          "accent": true
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "C#",
+          "octave": -1
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        },
+        {
+          "note": "F",
+          "octave": 1,
+          "accent": true,
+          "slide": true
+        },
+        {
+          "note": "F#",
+          "slide": true
+        },
+        {
+          "note": "F"
+        },
+        {
+          "note": "F",
+          "gate": "off"
+        }
+      ]
+    }
+  }
+}

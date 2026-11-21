@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "td3"
+version = "0.1.0"
+description = "Banco de patrones para Behringer TD-3: dominio, validacion y CLI"
+requires-python = ">=3.12"
+dependencies = ["pydantic>=2"]
+
+[project.optional-dependencies]
+midi = ["mido", "python-rtmidi"]
+dev = ["pytest", "ruff", "mypy"]
+
+[project.scripts]
+td3 = "td3.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/td3"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.mypy]
+strict = true
+files = ["src"]
+plugins = ["pydantic.mypy"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
