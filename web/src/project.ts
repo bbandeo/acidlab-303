@@ -6,6 +6,7 @@ export const DEFAULT_GENERATOR: GenerateOptions = {
 };
 
 export const TONE_CONTROLS = {
+  tuning: { label: "Tuning", min: -12, max: 12, step: 1, unit: "st" },
   cutoff: { label: "Cutoff", min: 150, max: 2000, step: 10, unit: "Hz" },
   resonance: { label: "Resonance", min: 0, max: 30, step: 1, unit: "dB" },
   envelope: { label: "Envelope", min: 0, max: 100, step: 1, unit: "%" },
@@ -17,7 +18,7 @@ export const TONE_CONTROLS = {
 export type ToneKey = keyof typeof TONE_CONTROLS;
 export type Tone = Record<ToneKey, number> & { driveEnabled: boolean; legacySlideAccent?: true };
 export const DEFAULT_TONE: Tone = {
-  cutoff: 500, resonance: 12, envelope: 50, decay: 50, accent: 50, drive: 0, driveEnabled: false,
+  tuning: 0, cutoff: 500, resonance: 12, envelope: 50, decay: 50, accent: 50, drive: 0, driveEnabled: false,
 };
 
 export interface Project {
@@ -83,6 +84,8 @@ export function parseProjectText(text: string, legacyGenerator = DEFAULT_GENERAT
   const tone: Tone = { ...DEFAULT_TONE, driveEnabled: storedTone.driveEnabled };
   if (storedTone.legacySlideAccent === true) tone.legacySlideAccent = true;
   else if (storedTone.legacySlideAccent !== undefined) throw new Error("Compatibilidad de Accent inválida");
+  // Tuning llegó después del formato v1: los proyectos anteriores no lo traen.
+  if (storedTone.tuning === undefined) storedTone.tuning = DEFAULT_TONE.tuning;
   for (const key of Object.keys(TONE_CONTROLS) as ToneKey[]) {
     const { min, max } = TONE_CONTROLS[key];
     tone[key] = numberIn(storedTone[key], min, max, TONE_CONTROLS[key].label);

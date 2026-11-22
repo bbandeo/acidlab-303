@@ -1,6 +1,6 @@
 import { expect, it } from "vitest";
 import { DEFAULT_TONE } from "../src/project";
-import { noteEnvelope, driveCurve, driveLevels } from "../src/synth";
+import { noteEnvelope, driveCurve, driveLevels, volumeGain } from "../src/synth";
 
 it("uses legacy attacks at migration values and preserves unaccented amplitude", () => {
   expect(noteEnvelope(DEFAULT_TONE, false)).toEqual({ peak: 0.55, excursion: 1250, decay: 0.12 });
@@ -19,4 +19,9 @@ it("varies the compensated saturation curve while retaining symmetry", () => {
   const curve = driveCurve();
   expect(curve[0]).toBeCloseTo(-curve.at(-1)!);
   expect(curve[1024]).toBe(0);
+});
+
+it("keeps the previous output level at the default volume", () => {
+  expect(volumeGain(70)).toBeCloseTo(0.98);
+  expect(volumeGain(0)).toBe(0);
 });

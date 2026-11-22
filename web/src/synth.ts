@@ -26,6 +26,9 @@ export function noteEnvelope(tone: Tone, accented: boolean) {
   };
 }
 
+/** 70 % ≈ ganancia unitaria, el nivel que tenía la app antes de la perilla Volume. */
+export const volumeGain = (volume: number) => 1.4 * volume / 100;
+
 const saturation = (x: number) => Math.tanh(4 * x) * 0.25;
 const driveGain = (amount: number) => 0.25 + 1.75 * amount / 100;
 const driveCompensation = (gain: number) => gain ** -0.75;
@@ -49,6 +52,8 @@ export class AcidSynth {
   private filterDepth!: GainNode;
   private accentEnv!: ConstantSourceNode;
   private accentDepth!: GainNode;
+  private master!: GainNode;
+  private volume = 70;
   private dry!: GainNode;
   private wet!: GainNode;
   private driveInput!: GainNode;
@@ -124,12 +129,32 @@ export class AcidSynth {
     shaper.curve = driveCurve();
     shaper.oversample = "2x";
     this.osc.connect(this.filter).connect(this.vca).connect(out);
-    out.connect(this.dry).connect(ctx.destination);
-    out.connect(this.driveInput).connect(shaper).connect(this.driveLevel).connect(this.wet).connect(ctx.destination);
+    this.master = ctx.createGain();
+    this.master.gain.value = volumeGain(this.volume);
+    out.connect(this.dry).connect(this.master);
+    out.connect(this.driveInput).connect(shaper).connect(this.driveLevel).connect(this.wet).connect(this.master);
+    this.master.connect(ctx.destination);
     this.ctx = ctx;
     this.applyTone();
     this.osc.start();
     return ctx;
+  }
+
+  /** Volumen de escucha 0–100 (preferencia local, no forma parte del proyecto). */
+  setVolume(volume: number): void {
+    this.volume = volume;
+    if (this.ctx) this.master.gain.setTargetAtTime(volumeGain(volume), this.ctx.currentTime, 0.015);
+  }
+
+  /** Hace sonar un paso suelto mientras se edita, solo con el secuenciador detenido. */
+  preview(step: Step): void {
+    if (this.playing || step.gate === "off") return;
+    const ctx = this.ensure();
+    void ctx.resume();
+    const note = { ...step, gate: "on" as const, slide: false };
+    this.slideFromPrev = false;
+    this.schedule({ steps: [note, { ...note, gate: "off" }], length: 2, triplet: false }, 0, ctx.currentTime + 0.01, 0.16);
+    this.slideFromPrev = false;
   }
 
   get playing(): boolean {
@@ -210,7 +235,7 @@ export class AcidSynth {
       return;
     }
     if (step.gate === "on") {
-      const freq = hz(midiOf(step));
+      const freq = hz(midiOf(step) + this.tone.tuning);
       if (this.slideFromPrev) {
         // Slide 303: sin reataque, glide de ~60 ms hacia la nota nueva.
         this.osc.frequency.setTargetAtTime(freq, t, 0.02);

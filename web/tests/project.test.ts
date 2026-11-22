@@ -41,3 +41,14 @@ it("can start a new project in a browser without the secure-context UUID API", (
     Object.defineProperty(crypto, "randomUUID", { configurable: true, value: uuid });
   }
 });
+
+it("opens projects saved before the Tuning knob existed and round-trips tuning", () => {
+  const project = createProject();
+  const stored = JSON.parse(projectText(project));
+  delete stored.tone.tuning;
+  expect(parseProjectText(JSON.stringify(stored)).project.tone.tuning).toBe(0);
+  const tuned = { ...project, tone: { ...project.tone, tuning: -5 } };
+  expect(parseProjectText(projectText(tuned)).project).toEqual(tuned);
+  const outOfRange = JSON.stringify({ ...stored, tone: { ...stored.tone, tuning: 13 } });
+  expect(() => parseProjectText(outOfRange)).toThrow(/Tuning/);
+});
