@@ -10,8 +10,10 @@ import { deleteBank, getPref, listBanks, setPref } from "./storage";
 import { AcidSynth } from "./synth";
 import { useProject } from "./use-project";
 import { zipFiles } from "./zip";
-import { dragValue, isTheme, sliderKey, THEMES, trackDrag, type ThemeId } from "./panel/gesture";
+import { dragValue, sliderKey, THEMES, trackDrag } from "./panel/gesture";
 import { Knob } from "./panel/knob";
+import { Scope } from "./panel/scope";
+import { getPanelTheme, PANEL_THEMES, resolvePanelTheme, type PanelTheme } from "./panel/themes";
 import { ActionRow, MenuItem, MenuNote, MenuShell, PrimaryButton, ValueRow } from "./panel/menu";
 
 const randomSeed = () => Math.floor(Math.random() * 100000);
@@ -34,14 +36,13 @@ function loadVolume(): number {
   return Number.isInteger(v) && v >= 0 && v <= 100 ? v : 70;
 }
 
-function loadTheme(): ThemeId {
-  const t = getPref("theme");
-  return isTheme(t) ? t : "mate";
+function loadTheme(): PanelTheme {
+  return resolvePanelTheme(new URLSearchParams(location.search).get("theme"), getPref("theme"));
 }
 
 type OpenRequest = { project: Project; target: FileTarget | null; draft?: Draft };
 type SeqImport = Extract<Imported, { kind: "pattern" }>;
-type Screen = "root" | "gen" | "file" | "midi" | "drafts" | "import" | "pending";
+type Screen = "root" | "themes" | "gen" | "file" | "midi" | "drafts" | "import" | "pending";
 const gateName: Record<Step["gate"], string> = { on: "Sonido", off: "Silencio", tie: "Ligadura" };
 const cancelled = (e: unknown) => e instanceof DOMException && e.name === "AbortError";
 
@@ -96,9 +97,12 @@ export function App() {
   const [lenDraft, setLenDraft] = useState<number | null>(null);
   const [volume, setVolume] = useState(loadVolume);
   const [volumeDraft, setVolumeDraft] = useState<number | null>(null);
-  const [theme, setTheme] = useState(loadTheme);
+  const [themeId, setThemeId] = useState(loadTheme);
+  const model = getPanelTheme(themeId);
+  const theme = model.finish;
+  const [rhythm, setRhythm] = useState({ kick: false, hats: false });
   const [msg, setMsg] = useState<{ text: string; error?: boolean } | null>(null);
-  const [screen, setScreen] = useState<Screen | null>(null);
+  const [screen, setScreen] = useState<Screen | null>(() => model.opensFile ? "file" : null);
   const [folder, setFolder] = useState<Folder>();
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const recoverableDrafts = drafts.filter((draft) => draft.session !== sessionId);
@@ -146,7 +150,8 @@ export function App() {
     synth.bpm = shownBpm;
     synth.setTone(tone);
     synth.setVolume(shownVolume);
-  }, [pattern, shownBpm, tone, shownVolume, synth]);
+    synth.rhythm = model.unified ? rhythm : { kick: false, hats: false };
+  }, [pattern, shownBpm, tone, shownVolume, synth, model.unified, rhythm]);
 
   useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -209,11 +214,14 @@ export function App() {
     return list[(list.indexOf(value) + by + list.length) % list.length]!;
   }
 
-  function doGenerate() {
-    commit((p) => ({ ...p, bank: generate(p.generator) }), "generación");
+  function doGenerate(seed = opts.seed) {
+    commit((p) => {
+      const generator = { ...p.generator, seed };
+      return { ...p, generator, bank: generate(generator) };
+    }, "generación");
     setSel(null);
     setScreen(null);
-    info(`GEN ${opts.seed}`);
+    info(`GEN ${seed}`);
   }
 
   function updateBank(mut: (b: Bank) => void, label = "edición de patrón") {
@@ -481,39 +489,55 @@ export function App() {
     setScreen("root");
   }
 
-  function changeTheme(by: number) {
-    const next = cycle(THEMES.map((t) => t.id), theme, by);
-    setTheme(next);
+  function changeTheme(next: PanelTheme) {
+    setThemeId(next);
     setPref("theme", next);
+    const url = new URL(location.href);
+    url.searchParams.set("theme", next);
+    window.history.replaceState(null, "", url);
+    setScreen(getPanelTheme(next).opensFile ? "file" : null);
   }
+
+  function densityStep(by: number) {
+    const d = Math.round((opts.density + by) * 20) / 20;
+    setOpt("density", d > 1.001 ? 0.1 : d < 0.099 ? 1 : d);
+  }
+
+  const scaleIds = Object.keys(SCALES) as ScaleId[];
+  const styleIds = Object.keys(STYLES) as StyleId[];
 
   const fullStatus = dirty
     ? recoverable ? "Borrador local" : draftError ? "Cambios sin guardar · borrador no disponible" : "Cambios sin guardar"
     : target ? `Guardado en ${target.folder?.name ?? target.name}` : "Sesión abierta";
   const status = dirty ? (draftError ? "● EDIT !" : "● EDIT") : target ? "SAVED" : "NEW";
-  const themeLabel = THEMES.find((t) => t.id === theme)!.label;
+  const themeLabel = `${model.id} · ${model.label}`;
   const negro = theme === "negro";
 
   function renderMenu() {
     if (!screen) return null;
     const titles: Record<Screen, string> = {
-      root: "MENÚ", gen: "GENERADOR", file: "ARCHIVO", midi: "MIDI · TD-3", drafts: "BORRADORES",
+      root: "MENÚ", themes: "MATERIAL", gen: "GENERADOR", file: "ARCHIVO", midi: "MIDI · TD-3", drafts: "BORRADORES",
       import: "IMPORTAR .SEQ", pending: "SIN GUARDAR",
-    };
-    const scaleIds = Object.keys(SCALES) as ScaleId[];
-    const styleIds = Object.keys(STYLES) as StyleId[];
-    const densityStep = (by: number) => {
-      const d = Math.round((opts.density + by) * 20) / 20;
-      setOpt("density", d > 1.001 ? 0.1 : d < 0.099 ? 1 : d);
     };
     return (
       <MenuShell title={titles[screen]} footer={bank.name} onBack={backMenu} onClose={closeMenu}>
-        {screen === "root" && <div class="m-list">
+        {screen === "root" && <div class="m-sections"><div class="m-list">
           <MenuItem label="GENERADOR" sub={`${opts.tonic} ${SCALES[opts.scale].label.toLowerCase()} · ${STYLES[opts.style].label.toLowerCase()}`} onClick={() => setScreen("gen")} />
           <MenuItem label="ARCHIVO" sub={target ? target.name : "Proyecto · exportar .seq"} onClick={() => setScreen("file")} />
           <MenuItem label="MIDI" sub="Enviar patrón al TD-3 · experimental" onClick={() => setScreen("midi")} />
           <MenuItem label="BORRADORES" sub={`${recoverableDrafts.length} recuperable${recoverableDrafts.length === 1 ? "" : "s"}`} onClick={() => setScreen("drafts")} />
-          <MenuItem label="MATERIAL" sub="Acabado del panel" value={themeLabel} onClick={() => changeTheme(1)} />
+        </div><div class="m-file-group">
+          <h2 class="m-group-title">Panel</h2>
+          <div class="m-list"><MenuItem label="MATERIAL" sub="Elegir modelo del panel" value={themeLabel} onClick={() => setScreen("themes")} /></div>
+        </div></div>}
+
+        {screen === "themes" && <div class="m-list m-themes">
+          {PANEL_THEMES.map((option) => <button class="m-item theme-option" key={option.id}
+            aria-pressed={option.id === themeId} onClick={() => changeTheme(option.id)}>
+            <span class="theme-chip" data-finish={option.finish} aria-hidden="true" />
+            <span class="m-item-text"><span class="m-item-label">{option.id} · {option.label}</span></span>
+            {option.id === themeId && <span class="m-value">Activo</span>}
+          </button>)}
         </div>}
 
         {screen === "gen" && <div class="m-fill">
@@ -529,14 +553,17 @@ export function App() {
           </div>
           <MenuNote>Tocá un valor para cambiarlo (SEMILLA sortea una nueva). Generar reemplaza los patrones A–D; se puede deshacer.</MenuNote>
           <div class="m-spacer" />
-          <PrimaryButton onClick={doGenerate}>GENERAR</PrimaryButton>
+          <PrimaryButton onClick={() => doGenerate()}>GENERAR</PrimaryButton>
         </div>}
 
-        {screen === "file" && <div class="m-list">
+        {screen === "file" && <div class="m-sections">
+          <div class="m-file-group"><h2 class="m-group-title">Proyecto</h2><div class="m-list">
           <ActionRow label="Carpeta de trabajo" sub={folder?.name ?? "Sin carpeta · elegir"} disabled={!pickers.showDirectoryPicker || busy} onClick={() => void chooseFolder()} />
           <ActionRow label="Abrir proyecto" sub=".acidlab.json o banco .json" disabled={busy} onClick={() => void chooseProject()} />
           <ActionRow label="Guardar" sub={target ? target.name : "Elegir nombre y carpeta"} disabled={busy} onClick={() => void save()} />
           <ActionRow label="Guardar como" sub={`${bank.name}.acidlab.json`} disabled={busy} onClick={() => setSaveName(`${bank.name}.acidlab.json`)} />
+          <ActionRow label="Descargar proyecto" sub={target?.name ?? `${bank.name}.acidlab.json`} onClick={() => { download(projectFile(current)); info("Descarga iniciada"); }} />
+          </div>
           {saveName !== null && <form class="m-form" onSubmit={(e) => { e.preventDefault(); void save(saveName); }}>
             <label class="m-field">NOMBRE DE ARCHIVO
               <input type="text" required maxLength={100} value={saveName} onInput={(e) => setSaveName(e.currentTarget.value)} />
@@ -547,7 +574,8 @@ export function App() {
               <PrimaryButton type="submit" disabled={busy || !folder}>GUARDAR</PrimaryButton>
             </div>
           </form>}
-          <ActionRow label="Descargar proyecto" sub={target?.name ?? `${bank.name}.acidlab.json`} onClick={() => { download(projectFile(current)); info("Descarga iniciada"); }} />
+          </div>
+          <div class="m-file-group"><h2 class="m-group-title">Patrones .seq</h2><div class="m-list">
           <ActionRow label="Importar .seq" sub="a un patrón A–D" disabled={busy} onClick={() => fileInput.current?.click()} />
           <ActionRow label="Exportar A–D" sub={folder ? `4 × .seq para SynthTribe en ${folder.name}` : "4 × .seq · requiere carpeta"} disabled={!folder || busy} onClick={() => void exportPatterns()} />
           {exportBatch && <ActionRow label="Reintentar pendientes"
@@ -555,6 +583,8 @@ export function App() {
             disabled={!folder || busy} onClick={() => void exportPatterns(true)} />}
           <ActionRow label="Descargar ZIP" sub="patrones A–D" onClick={() => void downloadZip()} />
           {canShareSeq && <ActionRow label="Compartir .seq" sub="Drive, Telegram…" onClick={() => void sharePatterns()} />}
+          </div></div>
+          <div class="m-file-group"><h2 class="m-group-title">Banco</h2><div class="m-list">
           <ActionRow label="Descargar banco JSON" sub={`${bank.name}.json`} onClick={() => { download(jsonFile(bank)); info("JSON ↓"); }} />
           {legacy.length > 0 && <details class="m-details"><summary>Bancos locales anteriores</summary>
             {legacy.map((b) => <div class="m-draft" key={b.name}>
@@ -569,6 +599,7 @@ export function App() {
               </span>
             </div>)}
           </details>}
+          </div></div>
         </div>}
 
         {screen === "midi" && <MidiPanel pattern={pattern} patternKey={key} onMessage={info} onError={fail} />}
@@ -620,18 +651,21 @@ export function App() {
   }
 
   return (
-    <main class="panel" data-theme={theme} aria-label="AcidLab 303">
+    <main class="panel" data-theme={theme} data-model={themeId} data-layout={model.unified ? "unified" : "classic"} aria-label="AcidLab 303">
+      <div class="panel-body" inert={screen !== null}>
       <header class="p-head">
         <div class="brand">
           <span class={playing ? "brand-led on" : "brand-led"} aria-hidden="true" />
           <h1><span class="b-name">ACIDLAB</span> <span class="b-num">303</span></h1>
           <span class="b-sub">BASS LINE</span>
         </div>
+        {model.unified && <Scope synth={synth} playing={playing && !screen} />}
         <button class="btn menu-btn" aria-haspopup="dialog" onClick={() => setScreen("root")}>
           MENU{recoverableDrafts.length > 0 && <span class="menu-dot" aria-label="Hay borradores" />}
         </button>
       </header>
 
+      <div class="tone-block">
       <section class="lcd" aria-label="Display">
         <span class="glare" aria-hidden="true" />
         {msg && !msg.error
@@ -662,7 +696,9 @@ export function App() {
         </div>
       </section>
 
-      <section class="knobs" aria-label="Timbre">
+      <section class="timbre" aria-label="Timbre">
+        {model.unified && <div class="engraving" aria-hidden="true">Tone</div>}
+        <div class="knobs">
         {PANEL_KNOBS.map(({ key: control, label }) => {
           if (control === "volume") {
             return <Knob key={control} label={label} value={shownVolume} {...VOLUME}
@@ -675,8 +711,12 @@ export function App() {
             preview={(value) => setToneGesture({ control, value })}
             cancel={() => setToneGesture(null)} commit={(value) => changeTone(control, value)} />;
         })}
+        </div>
       </section>
+      </div>
 
+      <div class="sequence-block">
+      {model.unified && <div class="engraving" aria-hidden="true">Sequencer</div>}
       <section class="bar" aria-label="Patrón">
         <div class="pats" role="tablist" aria-label="Variantes">
           {PATTERN_KEYS.map((k, i) => (
@@ -783,6 +823,30 @@ export function App() {
         )}
       </section>
 
+      </div>
+
+      {model.unified && <section class="performance" aria-label="Generador y ritmo">
+        <div class="quick-gen">
+          <span class="quick-title" aria-hidden="true">Random</span>
+          {([
+            ["Tónica", opts.tonic, () => setOpt("tonic", cycle(NOTES, opts.tonic, 1))],
+            ["Escala", opts.scale === "menor-natural" ? "MENOR" : SCALES[opts.scale].label.toUpperCase(),
+              () => setOpt("scale", cycle(scaleIds, opts.scale, 1))],
+            ["Estilo", STYLES[opts.style].label.toUpperCase(), () => setOpt("style", cycle(styleIds, opts.style, 1))],
+            ["Dens", `${Math.round(opts.density * 100)}%`, () => densityStep(0.1)],
+          ] satisfies [string, string, () => void][]).map(([label, value, change]) => <button type="button" key={label} aria-label={`${label}: ${value}`} onClick={change}>
+            <span>{label}</span><strong>{value}</strong>
+          </button>)}
+          <button class="btn quick-random" aria-label="Generar patrones al azar" onClick={() => doGenerate(randomSeed())}>GEN</button>
+        </div>
+        <div class="rhythm" aria-label="Ritmo">
+          {(["kick", "hats"] as const).map((part) => <button key={part} role="switch" aria-checked={rhythm[part]}
+            onClick={() => setRhythm((state) => ({ ...state, [part]: !state[part] }))}>
+            {part}<span class="switch-track" aria-hidden="true"><span /></span>
+          </button>)}
+        </div>
+      </section>}
+
       <section class="transport" aria-label="Transporte">
         <button class={playing ? "btn run playing" : "btn run"} aria-pressed={playing} onClick={() => void togglePlay()}>
           <span class="run-fill" aria-hidden="true" />
@@ -790,11 +854,14 @@ export function App() {
           <span class="run-text">{negro ? (playing ? "STOP" : "RUN") : "RUN/STOP"}</span>
         </button>
         <button class="btn" disabled={!undo || gesturing} aria-label={undo ? `Deshacer ${undo}` : "Deshacer"} title={undo}
-          onClick={() => { move("undo"); info("UNDO"); }}>UNDO</button>
+          onClick={() => { move("undo"); info("UNDO"); }}><span class="transport-mark" aria-hidden="true">↶</span>UNDO</button>
         <button class="btn" disabled={!redo || gesturing} aria-label={redo ? `Rehacer ${redo}` : "Rehacer"} title={redo}
-          onClick={() => { move("redo"); info("REDO"); }}>REDO</button>
-        <button class="btn" disabled={busy} aria-label="Guardar (write)" onClick={() => void save()}>WRITE</button>
+          onClick={() => { move("redo"); info("REDO"); }}><span class="transport-mark" aria-hidden="true">↷</span>REDO</button>
+        <button class="btn" disabled={busy} aria-label="Guardar (write)" onClick={() => void save()}><span class="transport-mark" aria-hidden="true">↓</span>WRITE
+          {dirty && <span class="write-dot" aria-hidden="true" />}</button>
       </section>
+
+      </div>
 
       {msg?.error && <div class="toast" role="alert">
         <span>{msg.text}</span><button aria-label="Cerrar aviso" onClick={() => setMsg(null)}>✕</button>

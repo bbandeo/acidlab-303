@@ -5,7 +5,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   // Rutas relativas: sirve igual en GitHub Pages (subruta), localhost y Capacitor.
   base: "./",
-  server: { fs: { allow: [".."] } },
+  server: { allowedHosts: ["terminal.local"], fs: { allow: [".."] } },
   // Túnel ngrok para probar en el teléfono (`ngrok http 4173`).
   preview: { allowedHosts: [".ngrok-free.app", ".ngrok-free.dev", ".ngrok.app", ".ngrok.io"] },
   plugins: [

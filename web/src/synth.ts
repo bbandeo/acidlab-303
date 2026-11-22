@@ -53,6 +53,9 @@ export class AcidSynth {
   private accentEnv!: ConstantSourceNode;
   private accentDepth!: GainNode;
   private master!: GainNode;
+  private analyser?: AnalyserNode;
+  private drumNoise?: AudioBuffer;
+  private drumSources = new Set<AudioScheduledSourceNode>();
   private volume = 70;
   private dry!: GainNode;
   private wet!: GainNode;
@@ -68,6 +71,7 @@ export class AcidSynth {
 
   pattern: Pattern | null = null;
   bpm = 128;
+  rhythm = { kick: false, hats: false };
   onStep: (i: number) => void = () => {};
 
   setTone(tone: Tone): void {
@@ -140,6 +144,55 @@ export class AcidSynth {
     return ctx;
   }
 
+  get scope(): AnalyserNode | undefined {
+    if (!this.ctx) return;
+    if (!this.analyser) {
+      this.analyser = this.ctx.createAnalyser();
+      this.analyser.fftSize = 2048;
+      this.master.connect(this.analyser);
+    }
+    return this.analyser;
+  }
+
+  private scheduleDrum(ctx: AudioContext, kind: "kick" | "hats", at: number): void {
+    const envelope = ctx.createGain();
+    envelope.connect(this.master);
+    const end = at + (kind === "kick" ? 0.34 : 0.07);
+    let source: AudioScheduledSourceNode;
+    if (kind === "kick") {
+      const osc = ctx.createOscillator();
+      osc.frequency.setValueAtTime(150, at);
+      osc.frequency.exponentialRampToValueAtTime(42, at + 0.12);
+      envelope.gain.setValueAtTime(0.001, at);
+      envelope.gain.exponentialRampToValueAtTime(0.48, at + 0.003);
+      osc.connect(envelope);
+      source = osc;
+    } else {
+      if (!this.drumNoise) {
+        this.drumNoise = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * 0.08), ctx.sampleRate);
+        const data = this.drumNoise.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = this.drumNoise;
+      const filter = ctx.createBiquadFilter();
+      filter.type = "highpass";
+      filter.frequency.value = 7200;
+      noise.connect(filter).connect(envelope);
+      envelope.gain.setValueAtTime(0.16, at);
+      source = noise;
+    }
+    envelope.gain.exponentialRampToValueAtTime(0.001, end);
+    source.onended = () => {
+      this.drumSources.delete(source);
+      source.disconnect();
+      envelope.disconnect();
+    };
+    this.drumSources.add(source);
+    source.start(at);
+    source.stop(end + 0.004);
+  }
+
   /** Volumen de escucha 0–100 (preferencia local, no forma parte del proyecto). */
   setVolume(volume: number): void {
     this.volume = volume;
@@ -181,6 +234,8 @@ export class AcidSynth {
     this.timer = null;
     for (const timer of this.stepTimers) clearTimeout(timer);
     this.stepTimers.clear();
+    for (const drum of this.drumSources) drum.stop();
+    this.drumSources.clear();
     if (this.ctx) {
       const t = this.ctx.currentTime;
       for (const gain of [this.vca.gain, this.accentEnv.offset]) {
@@ -207,6 +262,8 @@ export class AcidSynth {
       const i = this.index % p.length;
       const at = Math.max(this.nextTime, ctx.currentTime);
       this.schedule(p, i, at, dur);
+      if (this.rhythm.kick && i % 4 === 0) this.scheduleDrum(ctx, "kick", at);
+      if (this.rhythm.hats && i % 4 === 2) this.scheduleDrum(ctx, "hats", at);
       const indicate = () => {
         this.stepTimers.delete(timer);
         if (ctx.currentTime < at) {

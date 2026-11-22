@@ -13,10 +13,10 @@ interface ShellProps {
 export function MenuShell({ title, footer, onBack, onClose, children }: ShellProps) {
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    root.current?.querySelector<HTMLElement>(".m-body button, .m-body input, .m-body select")?.focus({ preventScroll: true });
+    root.current?.focus({ preventScroll: true });
   }, [title]);
   return (
-    <div class="menu" role="dialog" aria-modal="true" aria-label={title} ref={root}
+    <div class="menu" role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} ref={root}
       onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); onClose(); } }}>
       <div class="m-head">
         <button class="m-icon" aria-label="Volver" onClick={onBack}>←</button>
@@ -59,8 +59,11 @@ export function ValueRow({ label, value, onClick, onPrev, plain }: {
 export function ActionRow({ label, sub, onClick, disabled }: { label: string; sub?: string; onClick: () => void; disabled?: boolean }) {
   return (
     <button class="m-action" disabled={disabled} onClick={onClick}>
-      <span class="m-action-label">{label}</span>
-      {sub && <span class="m-sub">{sub}</span>}
+      <span class="m-item-text">
+        <span class="m-action-label">{label}</span>
+        {sub && <span class="m-sub">{sub}</span>}
+      </span>
+      <span class="m-chev" aria-hidden="true">›</span>
     </button>
   );
 }
