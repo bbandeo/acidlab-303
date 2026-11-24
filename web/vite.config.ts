@@ -7,7 +7,16 @@ export default defineConfig({
   base: "./",
   server: { allowedHosts: ["terminal.local"], fs: { allow: [".."] } },
   // Túnel ngrok para probar en el teléfono (`ngrok http 4173`).
-  preview: { allowedHosts: [".ngrok-free.app", ".ngrok-free.dev", ".ngrok.app", ".ngrok.io"] },
+  // acid.bnbandeo.com: dominio de producción detrás de nginx (ver deploy/).
+  preview: {
+    allowedHosts: [
+      ".ngrok-free.app",
+      ".ngrok-free.dev",
+      ".ngrok.app",
+      ".ngrok.io",
+      "acid.bnbandeo.com",
+    ],
+  },
   plugins: [
     preact(),
     VitePWA({
