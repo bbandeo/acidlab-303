@@ -63,12 +63,16 @@ Decisiones de diseño en [`docs/adr/`](docs/adr/):
 
 ## App Android (`web/`)
 
-PWA instalable: genera bancos A–D en el teléfono (tónica, escala, densidad, estilo, semilla), edita la grilla de 16 pasos, la reproduce con un sintetizador Web Audio y exporta los 4 `.seq` (compartir a Drive o Telegram, o descargar) para cargarlos en SynthTribe. Funciona offline y guarda los bancos en el navegador.
+**Acidlab 303** es una PWA instalable para generar bancos A–D, editar los 16 pasos y tocar mientras corre el loop. Los seis mandos afectan al sintetizador Web Audio. Podés ajustar cada perilla con arrastre vertical, flechas del teclado o entrada numérica. Deshacer y Rehacer conservan la posición del loop y tratan cada giro como una sola acción.
+
+**Archivo** abre un banco JSON anterior o un proyecto `.acidlab.json`. El proyecto guarda el banco, los parámetros del generador, el tempo y el timbre. En navegadores con acceso a carpetas podés elegir un destino, guardar el proyecto y exportar los cuatro `.seq` para SynthTribe en una carpeta nueva por tanda. También podés descargar el proyecto o un ZIP de los cuatro patrones. El timbre se guarda en el proyecto y los `.seq` conservan el formato Bank v1 del códec.
+
+La PWA funciona sin conexión tras la primera carga de la versión compilada. IndexedDB conserva los borradores confirmados de cada sesión. Después de recargar, podés recuperar los que difieren del guardado explícito. Las carpetas y borradores pertenecen al origen del navegador.
 
 ```bash
 cd web
 npm ci
-npm run dev        # desarrollo (http://localhost:5173)
+npm run dev -- --host 0.0.0.0 --port 5173 # desarrollo
 npm run build      # genera dist/ con service worker
 npm run preview    # sirve dist/ en http://localhost:4173
 ```
@@ -86,7 +90,7 @@ npm run preview    # sirve dist/ en http://localhost:4173
 2. Comparar con el hex que muestra la app para el mismo patrón, grupo y slot.
 3. Verificar que el slot de destino sea el elegido (FORMAT.md duda entre 0–7/8–15).
 
-**Calidad** (desde `web/`): `npm run typecheck && npm run lint && npm test && npm run build`. Los tests comparan el codec TS byte a byte con los `.seq` reales y, si existe `.venv`, en vivo contra `td3 export` y `td3 validate`.
+**Calidad.** Desde `web/`, ejecutá `npm run typecheck && npm run lint && npm test && npm run build`. Los tests comparan el códec TypeScript byte a byte con `.seq` reales. Con `.venv` en la raíz del repositorio también lo comparan en vivo con `td3 export` y `td3 validate`.
 
 ## Gate de calidad
 
