@@ -38,7 +38,13 @@ export default defineConfig({
           { src: "icon-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
         ],
       },
-      workbox: { globPatterns: ["**/*.{js,css,html,svg,png,webmanifest,woff2}"] },
+      // Los PDF de GUÍAS se abren navegando: sin la exclusión, el SW devolvería index.html.
+      // Los PDF van precacheados para leerlos sin conexión; el límite por defecto (2 MiB) los dejaría afuera.
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,svg,png,webmanifest,woff2,pdf}"],
+        maximumFileSizeToCacheInBytes: 20 * 1024 * 1024,
+        navigateFallbackDenylist: [/\.pdf$/],
+      },
     }),
   ],
   test: { include: ["tests/**/*.test.ts"] },
