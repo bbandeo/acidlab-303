@@ -6,7 +6,7 @@ import { MidiPanel } from "./midi-panel";
 import { createProject, DEFAULT_GENERATOR, DEFAULT_TONE, parseGenerator, parseProjectText, projectText, TONE_CONTROLS, type Project, type ToneKey } from "./project";
 import { allowWrite, createExport, fileName, fingerprint, pickers, projectFile, writeExport, writeProject, type ExportBatch, type FileTarget, type Folder } from "./project-files";
 import { getDrafts, getFolder, getSavedTarget, putFolder, putSaved, type Draft } from "./project-storage";
-import { GUIDES } from "./guides";
+import { MANUALS, SHEETS } from "./guides";
 import { SAMPLES } from "./samples";
 import { deleteBank, getPref, listBanks, setPref } from "./storage";
 import { AcidSynth } from "./synth";
@@ -536,7 +536,7 @@ export function App() {
           <MenuItem label="GENERADOR" sub={`${opts.tonic} ${SCALES[opts.scale].label.toLowerCase()} · ${STYLES[opts.style].label.toLowerCase()}`} onClick={() => setScreen("gen")} />
           <MenuItem label="ARCHIVO" sub={target ? target.name : "Proyecto · exportar .seq"} onClick={() => setScreen("file")} />
           <MenuItem label="EJEMPLOS" sub={`${SAMPLES.length} patrones de referencia`} onClick={() => setScreen("samples")} />
-          <MenuItem label="GUÍAS" sub={`${GUIDES.length} manual${GUIDES.length === 1 ? "" : "es"} · PDF`} onClick={() => setScreen("guides")} />
+          <MenuItem label="GUÍAS" sub={`${MANUALS.length} manual${MANUALS.length === 1 ? "" : "es"} · ${SHEETS.length} hoja${SHEETS.length === 1 ? "" : "s"} de patrón`} onClick={() => setScreen("guides")} />
           <MenuItem label="MIDI" sub="Enviar patrón al TD-3 · experimental" onClick={() => setScreen("midi")} />
           <MenuItem label="BORRADORES" sub={`${recoverableDrafts.length} recuperable${recoverableDrafts.length === 1 ? "" : "s"}`} onClick={() => setScreen("drafts")} />
         </div><div class="m-file-group">
@@ -562,11 +562,14 @@ export function App() {
             : <ActionRow key={s.file} label={s.title} sub={s.detail} onClick={() => offerImport(s.imported, "samples")} />)}
         </div>}
 
-        {screen === "guides" && <div class="m-fill">
-          <div class="m-list">
-            {GUIDES.map((g) => <ActionRow key={g.url} label={g.title} sub="PDF · abre en pestaña nueva" onClick={() => window.open(g.url, "_blank", "noopener")} />)}
-          </div>
-          <MenuNote>Los manuales quedan guardados en el dispositivo y se pueden leer sin conexión.</MenuNote>
+        {screen === "guides" && <div class="m-sections">
+          <div class="m-file-group"><h2 class="m-group-title">Manuales</h2><div class="m-list">
+            {MANUALS.map((g) => <ActionRow key={g.url} label={g.title} sub="PDF · abre en pestaña nueva" onClick={() => window.open(g.url, "_blank", "noopener")} />)}
+          </div></div>
+          <div class="m-file-group"><h2 class="m-group-title">Hojas de patrón</h2><div class="m-list">
+            {SHEETS.map((g) => <ActionRow key={g.url} label={g.title} sub="Imagen · abre en pestaña nueva" onClick={() => window.open(g.url, "_blank", "noopener")} />)}
+          </div></div>
+          <MenuNote>Todo queda guardado en el dispositivo y se puede consultar sin conexión.</MenuNote>
         </div>}
 
         {screen === "themes" && <div class="m-list m-themes">
