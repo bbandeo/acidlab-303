@@ -489,6 +489,9 @@ h1 { margin: 0; font: inherit; }
 .m-action { flex-direction: column; align-items: flex-start; justify-content: center; gap: 5px; min-height: 62px; }
 .m-action:disabled { opacity: .4; cursor: default; }
 .m-action:disabled .m-sub { white-space: normal; }
+/* Resultados de la búsqueda en manuales: el fragmento se lee entero. */
+.m-hits .m-action { padding-block: 14px; }
+.m-hits .m-sub { white-space: normal; max-width: none; line-height: 1.6; }
 .m-action-label { font-size: 14px; font-weight: 700; letter-spacing: .04em; }
 .m-note { margin: 0; font-size: 11px; line-height: 1.6; color: #5f5a54; text-wrap: pretty; }
 .m-list .m-note { padding: 16px 4px; }

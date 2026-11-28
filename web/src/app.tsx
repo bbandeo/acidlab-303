@@ -7,6 +7,7 @@ import { createProject, DEFAULT_GENERATOR, DEFAULT_TONE, parseGenerator, parsePr
 import { allowWrite, createExport, fileName, fingerprint, pickers, projectFile, writeExport, writeProject, type ExportBatch, type FileTarget, type Folder } from "./project-files";
 import { getDrafts, getFolder, getSavedTarget, putFolder, putSaved, type Draft } from "./project-storage";
 import { MANUALS, SHEETS } from "./guides";
+import { ManualAsk } from "./manual-ask";
 import { SAMPLES } from "./samples";
 import { deleteBank, getPref, listBanks, setPref } from "./storage";
 import { AcidSynth } from "./synth";
@@ -563,6 +564,7 @@ export function App() {
         </div>}
 
         {screen === "guides" && <div class="m-sections">
+          <ManualAsk />
           <div class="m-file-group"><h2 class="m-group-title">Manuales</h2><div class="m-list">
             {MANUALS.map((g) => <ActionRow key={g.url} label={g.title} sub="PDF · abre en pestaña nueva" onClick={() => window.open(g.url, "_blank", "noopener")} />)}
           </div></div>

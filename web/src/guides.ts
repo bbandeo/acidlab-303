@@ -6,7 +6,7 @@ const files = import.meta.glob<string>("../../docs/guides/*.{pdf,jpg,jpeg,png}",
 const all = Object.entries(files)
   .map(([path, url]) => {
     const name = path.slice(path.lastIndexOf("/") + 1);
-    return { url, pdf: name.endsWith(".pdf"), title: name.slice(0, name.lastIndexOf(".")).replace(/_/g, " ") };
+    return { file: name, url, pdf: name.endsWith(".pdf"), title: name.slice(0, name.lastIndexOf(".")).replace(/_/g, " ") };
   })
   .sort((a, b) => a.title.localeCompare(b.title));
 

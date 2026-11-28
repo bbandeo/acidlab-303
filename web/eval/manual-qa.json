@@ -1,0 +1,29 @@
+{
+  "_notas": "keywords: lista de grupos; cada grupo es una regex sobre la respuesta sin acentos y en minúsculas, y todos deben coincidir. expected: cualquiera de las páginas sirve para recall@3.",
+  "questions": [
+    { "id": "m01", "q": "¿Para qué sirve el mando CUTOFF?", "expected": [{ "manual": "es", "page": 7 }, { "manual": "es", "page": 8 }], "keywords": ["frecuencia de corte|filtr"] },
+    { "id": "m02", "q": "¿Cuánto tiempo de calentamiento se recomienda antes de grabar?", "expected": [{ "manual": "es", "page": 8 }], "keywords": ["\\b15\\b|quince"] },
+    { "id": "m03", "q": "¿Necesito instalar algún driver para usarlo con la computadora?", "expected": [{ "manual": "es", "page": 8 }], "keywords": ["no (es necesari|requiere|necesita|hace falta|se necesita|precisa|tiene que|debe)|class.compliant|^(\\[\\d\\] )?no\\b"] },
+    { "id": "m04", "q": "¿A qué frecuencia tengo que ajustar el oscilador para afinar el sintetizador?", "expected": [{ "manual": "es", "page": 8 }], "keywords": ["\\b220\\b"] },
+    { "id": "m05", "q": "¿Cómo entro al modo de ajuste de sincronización del reloj?", "expected": [{ "manual": "es", "page": 8 }, { "manual": "es", "page": 7 }], "keywords": ["\\bback\\b", "write|next"] },
+    { "id": "m06", "q": "¿Cuántos pasos puede tener un patrón como máximo?", "expected": [{ "manual": "es", "page": 10 }, { "manual": "en", "page": 1 }], "keywords": ["\\b16\\b|dieciseis"] },
+    { "id": "m07", "q": "¿Cómo borro un patrón que ya existe?", "expected": [{ "manual": "es", "page": 10 }, { "manual": "en", "page": 1 }, { "manual": "es", "page": 7 }], "keywords": ["\\bclear\\b"] },
+    { "id": "m08", "q": "¿Cómo elimino un patrón de una pista?", "expected": [{ "manual": "es", "page": 11 }], "keywords": ["\\bdel\\b|\\bclear\\b", "function|funcion"] },
+    { "id": "m09", "q": "¿De qué color se pone el LED de encendido en el modo Poly Chain?", "expected": [{ "manual": "es", "page": 12 }], "keywords": ["rojo|verde|\\bred\\b|green"] },
+    { "id": "m10", "q": "¿Cuánto pesa el equipo?", "expected": [{ "manual": "es", "page": 14 }], "keywords": ["\\b0[.,]8\\b|800 ?g"] },
+    { "id": "m11", "q": "¿Para qué sirve la entrada FILTER IN?", "expected": [{ "manual": "es", "page": 7 }], "keywords": ["extern"] },
+    { "id": "g01", "soloGuia": true, "q": "Si no ingreso ninguna nota, ¿qué nota queda en los pasos del patrón?", "expected": [{ "manual": "en", "page": 1 }], "keywords": ["\\bdo\\b|\\bc\\b"] },
+    { "id": "g02", "soloGuia": true, "q": "Si no cargo los tiempos del patrón, ¿qué pasa cuando aprieto START/STOP?", "expected": [{ "manual": "en", "page": 1 }], "keywords": ["sonido|suen|sonar|sonara", "\\bno\\b|ningun|\\bsin\\b"] },
+    { "id": "g03", "soloGuia": true, "q": "¿Qué botón uso para poner un silencio en TIME MODE?", "expected": [{ "manual": "en", "page": 1 }], "keywords": ["(boton|tecla|pattern|interruptor|selector|pulsa|presiona|usa|usar|usas|pulse|presione|use)( el boton| la tecla)? [\"'«“]?a\\b(?! (la|el|los|las|un|una)\\b)"] },
+    { "id": "g04", "soloGuia": true, "q": "Mientras avanzo por los pasos en PITCH MODE, ¿qué indica cuál nota tiene asignada cada uno?", "expected": [{ "manual": "en", "page": 1 }], "keywords": ["\\bleds?\\b|luces|pilotos?"] },
+    { "id": "g05", "soloGuia": true, "q": "¿Dónde puedo encontrar la versión actual de la guía para escribir patrones?", "expected": [{ "manual": "en", "page": 1 }], "keywords": ["airainfo"] },
+    { "id": "x01", "outOfScope": true, "q": "¿Cómo instalo Ableton Live?" },
+    { "id": "x02", "outOfScope": true, "q": "¿Cuál es el precio del TD-3 en pesos argentinos?" },
+    { "id": "x03", "outOfScope": true, "q": "¿Quién ganó el mundial de fútbol de 2022?" },
+    { "id": "x04", "outOfScope": true, "q": "¿Cómo conecto el TD-3 por Bluetooth al celular?" },
+    { "id": "h01", "holdout": true, "soloGuia": true, "q": "Programé un patrón sin elegir las notas, ¿qué suena en cada paso?", "expected": [{ "manual": "en", "page": 1 }], "keywords": ["\\bdo\\b|\\bc\\b"] },
+    { "id": "h02", "holdout": true, "soloGuia": true, "q": "Armé un patrón pero no sale audio cuando le doy play, ¿qué me faltó?", "expected": [{ "manual": "en", "page": 1 }], "keywords": ["tiempo|timing|time mode|temporiz"] },
+    { "id": "h03", "holdout": true, "soloGuia": true, "q": "¿Con cuál tecla marco un paso como pausa?", "expected": [{ "manual": "en", "page": 1 }], "keywords": ["(boton|tecla|pattern|interruptor|selector|pulsa|presiona|usa|usar|usas|pulse|presione|use|con)( el boton| la tecla)? [\\\"'«“]?a\\b(?! (la|el|los|las|un|una)\\b)"] },
+    { "id": "h04", "holdout": true, "soloGuia": true, "q": "¿Hay algún enlace para bajar la guía de programación actualizada?", "expected": [{ "manual": "en", "page": 1 }], "keywords": ["airainfo"] }
+  ]
+}
