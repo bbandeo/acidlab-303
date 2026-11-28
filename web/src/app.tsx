@@ -14,7 +14,8 @@ import { dragValue, sliderKey, THEMES, trackDrag } from "./panel/gesture";
 import { Knob } from "./panel/knob";
 import { Scope } from "./panel/scope";
 import { getPanelTheme, PANEL_THEMES, resolvePanelTheme, type PanelTheme } from "./panel/themes";
-import { ActionRow, MenuItem, MenuNote, MenuShell, PrimaryButton, ValueRow } from "./panel/menu";
+import { ActionRow, InfoRow, MenuItem, MenuNote, MenuShell, PrimaryButton, ValueRow } from "./panel/menu";
+import { version } from "../package.json";
 
 const randomSeed = () => Math.floor(Math.random() * 100000);
 const legacyBpm = () => Math.min(160, Math.max(80, Number(getPref("bpm")) || 128));
@@ -42,7 +43,7 @@ function loadTheme(): PanelTheme {
 
 type OpenRequest = { project: Project; target: FileTarget | null; draft?: Draft };
 type SeqImport = Extract<Imported, { kind: "pattern" }>;
-type Screen = "root" | "themes" | "gen" | "file" | "midi" | "drafts" | "import" | "pending";
+type Screen = "root" | "themes" | "gen" | "file" | "midi" | "drafts" | "import" | "pending" | "about";
 const gateName: Record<Step["gate"], string> = { on: "Sonido", off: "Silencio", tie: "Ligadura" };
 const cancelled = (e: unknown) => e instanceof DOMException && e.name === "AbortError";
 
@@ -517,7 +518,7 @@ export function App() {
     if (!screen) return null;
     const titles: Record<Screen, string> = {
       root: "MENÚ", themes: "MATERIAL", gen: "GENERADOR", file: "ARCHIVO", midi: "MIDI · TD-3", drafts: "BORRADORES",
-      import: "IMPORTAR .SEQ", pending: "SIN GUARDAR",
+      import: "IMPORTAR .SEQ", pending: "SIN GUARDAR", about: "ACERCA DE",
     };
     return (
       <MenuShell title={titles[screen]} footer={bank.name} onBack={backMenu} onClose={closeMenu}>
@@ -529,7 +530,19 @@ export function App() {
         </div><div class="m-file-group">
           <h2 class="m-group-title">Panel</h2>
           <div class="m-list"><MenuItem label="MATERIAL" sub="Elegir modelo del panel" value={themeLabel} onClick={() => setScreen("themes")} /></div>
+        </div><div class="m-file-group">
+          <h2 class="m-group-title">App</h2>
+          <div class="m-list"><MenuItem label="ACERCA DE" sub={`Versión ${version}`} onClick={() => setScreen("about")} /></div>
         </div></div>}
+
+        {screen === "about" && <div class="m-fill">
+          <div class="m-list">
+            <InfoRow label="APP" value="Acidlab 303" />
+            <InfoRow label="VERSIÓN" value={version} />
+            <InfoRow label="PARA" value="Behringer TD-3" />
+          </div>
+          <MenuNote>Generador y editor de patrones ácidos para Behringer TD-3. Funciona sin conexión una vez instalada.</MenuNote>
+        </div>}
 
         {screen === "themes" && <div class="m-list m-themes">
           {PANEL_THEMES.map((option) => <button class="m-item theme-option" key={option.id}

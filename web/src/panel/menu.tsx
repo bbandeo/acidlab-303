@@ -68,6 +68,16 @@ export function ActionRow({ label, sub, onClick, disabled }: { label: string; su
   );
 }
 
+/** Dato de solo lectura: etiqueta y valor, sin acción. */
+export function InfoRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div class="m-row static">
+      <span class="m-row-label">{label}</span>
+      <span class="m-row-value plain">{value}</span>
+    </div>
+  );
+}
+
 export function MenuNote({ children, warn }: { children: ComponentChildren; warn?: boolean }) {
   return <p class={warn ? "m-note warn" : "m-note"}>{children}</p>;
 }
