@@ -6,6 +6,7 @@ import { MidiPanel } from "./midi-panel";
 import { createProject, DEFAULT_GENERATOR, DEFAULT_TONE, parseGenerator, parseProjectText, projectText, TONE_CONTROLS, type Project, type ToneKey } from "./project";
 import { allowWrite, createExport, fileName, fingerprint, pickers, projectFile, writeExport, writeProject, type ExportBatch, type FileTarget, type Folder } from "./project-files";
 import { getDrafts, getFolder, getSavedTarget, putFolder, putSaved, type Draft } from "./project-storage";
+import { SAMPLES } from "./samples";
 import { deleteBank, getPref, listBanks, setPref } from "./storage";
 import { AcidSynth } from "./synth";
 import { useProject } from "./use-project";
@@ -43,7 +44,7 @@ function loadTheme(): PanelTheme {
 
 type OpenRequest = { project: Project; target: FileTarget | null; draft?: Draft };
 type SeqImport = Extract<Imported, { kind: "pattern" }>;
-type Screen = "root" | "themes" | "gen" | "file" | "midi" | "drafts" | "import" | "pending" | "about";
+type Screen = "root" | "themes" | "gen" | "file" | "midi" | "drafts" | "import" | "pending" | "about" | "samples";
 const gateName: Record<Step["gate"], string> = { on: "Sonido", off: "Silencio", tie: "Ligadura" };
 const cancelled = (e: unknown) => e instanceof DOMException && e.name === "AbortError";
 
@@ -111,6 +112,8 @@ export function App() {
   const [legacy, setLegacy] = useState(listBanks);
   const [pendingSeq, setPendingSeq] = useState<SeqImport | null>(null);
   const [destination, setDestination] = useState<PatternKey>("A");
+  // Pantalla a la que vuelve ← desde "import": la que lo abrió.
+  const [importBack, setImportBack] = useState<Screen>("root");
   const [pendingOpen, setPendingOpen] = useState<OpenRequest | null>(null);
   const [saveName, setSaveName] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -384,13 +387,18 @@ export function App() {
       if (!file.name.toLowerCase().endsWith(".seq")) return await readProject(file);
       const imported = await importFile(file);
       if (imported.kind === "pattern") {
-        setPendingSeq(imported);
-        setDestination(key);
-        setScreen("import");
+        offerImport(imported, "root");
       }
     } catch (e) {
       fail(e);
     }
+  }
+
+  function offerImport(seq: SeqImport, back: Screen) {
+    setPendingSeq(seq);
+    setDestination(key);
+    setImportBack(back);
+    setScreen("import");
   }
 
   async function chooseFolder() {
@@ -487,7 +495,7 @@ export function App() {
     if (screen === "import") setPendingSeq(null);
     if (screen === "pending") setPendingOpen(null);
     setSaveName(null);
-    setScreen("root");
+    setScreen(screen === "import" ? importBack : "root");
   }
 
   function changeTheme(next: PanelTheme) {
@@ -519,12 +527,14 @@ export function App() {
     const titles: Record<Screen, string> = {
       root: "MENÚ", themes: "MATERIAL", gen: "GENERADOR", file: "ARCHIVO", midi: "MIDI · TD-3", drafts: "BORRADORES",
       import: "IMPORTAR .SEQ", pending: "SIN GUARDAR", about: "ACERCA DE",
+      samples: "EJEMPLOS",
     };
     return (
       <MenuShell title={titles[screen]} footer={bank.name} onBack={backMenu} onClose={closeMenu}>
         {screen === "root" && <div class="m-sections"><div class="m-list">
           <MenuItem label="GENERADOR" sub={`${opts.tonic} ${SCALES[opts.scale].label.toLowerCase()} · ${STYLES[opts.style].label.toLowerCase()}`} onClick={() => setScreen("gen")} />
           <MenuItem label="ARCHIVO" sub={target ? target.name : "Proyecto · exportar .seq"} onClick={() => setScreen("file")} />
+          <MenuItem label="EJEMPLOS" sub={`${SAMPLES.length} patrones de referencia`} onClick={() => setScreen("samples")} />
           <MenuItem label="MIDI" sub="Enviar patrón al TD-3 · experimental" onClick={() => setScreen("midi")} />
           <MenuItem label="BORRADORES" sub={`${recoverableDrafts.length} recuperable${recoverableDrafts.length === 1 ? "" : "s"}`} onClick={() => setScreen("drafts")} />
         </div><div class="m-file-group">
@@ -542,6 +552,12 @@ export function App() {
             <InfoRow label="PARA" value="Behringer TD-3" />
           </div>
           <MenuNote>Generador y editor de patrones ácidos para Behringer TD-3. Funciona sin conexión una vez instalada.</MenuNote>
+        </div>}
+
+        {screen === "samples" && <div class="m-list">
+          {SAMPLES.map((s) => "error" in s
+            ? <ActionRow key={s.file} label={s.title} sub={`${s.detail} · ${s.error}`} disabled onClick={() => {}} />
+            : <ActionRow key={s.file} label={s.title} sub={s.detail} onClick={() => offerImport(s.imported, "samples")} />)}
         </div>}
 
         {screen === "themes" && <div class="m-list m-themes">
