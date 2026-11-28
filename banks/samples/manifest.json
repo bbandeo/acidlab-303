@@ -1,0 +1,553 @@
+{
+  "generated": "2026-11-28",
+  "device": "Behringer TD-3 (formato .seq 1.3.7)",
+  "confidence_levels": {
+    "confirmed": "Respaldada por imagen, Excel o fuente web",
+    "high": "Nombre inequivoco, sin fuente directa",
+    "medium": "Probable, sin verificar",
+    "low": "Titulo o artista dudoso"
+  },
+  "count": 54,
+  "sequences": [
+    {
+      "file": "01 - The Pamp Panel - Confussion (Blade).seq",
+      "song_id": "confusion",
+      "artist": "New Order / The Pump Panel",
+      "title": "Confusion (Blade Theme)",
+      "part": null,
+      "confidence": "confirmed",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "02 - Daft Pank - De Funk.seq",
+      "song_id": "da-funk",
+      "artist": "Daft Punk",
+      "title": "Da Funk",
+      "part": null,
+      "confidence": "confirmed",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "03 - Joshe Wink - Higher State Of Conssciousnes.seq",
+      "song_id": "higher-state",
+      "artist": "Josh Wink",
+      "title": "Higher State of Consciousness",
+      "part": null,
+      "confidence": "confirmed",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "04 - Fatboy Slime - Everybodie Neeeds A 303.seq",
+      "song_id": "everybody-needs-a-303",
+      "artist": "Fatboy Slim",
+      "title": "Everybody Needs a 303",
+      "part": null,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "05 - The Prodiigy - Claustrofobic String.seq",
+      "song_id": "claustrophobic-sting",
+      "artist": "The Prodigy",
+      "title": "Claustrophobic Sting",
+      "part": null,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "06 - Phouture ‎- Acid Traxx.seq",
+      "song_id": "acid-tracks",
+      "artist": "Phuture",
+      "title": "Acid Tracks",
+      "part": null,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "07 - Apheex Twins - Orphans.seq",
+      "song_id": "orphans",
+      "artist": "Aphex Twin",
+      "title": "Orphans",
+      "part": null,
+      "confidence": "low",
+      "note": "Titulo sin verificar",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "08 - Tame Impola - Breeathe Deper.seq",
+      "song_id": "breathe-deeper",
+      "artist": "Tame Impala",
+      "title": "Breathe Deeper",
+      "part": null,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "09 - Rob Threzy - Chicargo on Acid.seq",
+      "song_id": "chicago-on-acid",
+      "artist": "Rob Three (?)",
+      "title": "Chicago on Acid",
+      "part": null,
+      "confidence": "low",
+      "note": "Sin verificar",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "10 - Kai Trancid - Desstructions.seq",
+      "song_id": "destruction",
+      "artist": "Kai Tracid",
+      "title": "Destruction",
+      "part": null,
+      "confidence": "medium",
+      "note": "Sin verificar",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "11 - Emanuel Top - Turkish Bazar.seq",
+      "song_id": "turkish-bazar",
+      "artist": "Emanuel Top",
+      "title": "Turkish Bazar",
+      "part": null,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "12 - The Subtzects VS Jef Mils - Beyond.seq",
+      "song_id": "beyond",
+      "artist": "The Subject(s) vs. Jeff Mills (?)",
+      "title": "Beyond",
+      "part": null,
+      "confidence": "low",
+      "note": "Sin verificar",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "13 - DJ Missjah - Kep Your Love.seq",
+      "song_id": "keep-your-love",
+      "artist": "DJ Misjah",
+      "title": "Keep Your Love",
+      "part": null,
+      "confidence": "low",
+      "note": "Sin verificar",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "14 - The KLF - What Time Love.seq",
+      "song_id": "what-time-is-love",
+      "artist": "The KLF",
+      "title": "What Time Is Love?",
+      "part": null,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "15 - Regall - Stil Raving.seq",
+      "song_id": "still-raving",
+      "artist": "Regal (?)",
+      "title": "Still Raving",
+      "part": null,
+      "confidence": "low",
+      "note": "Sin verificar",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "16 - Planetary Assult System - In From The Night.seq",
+      "song_id": "in-from-the-night",
+      "artist": "Planetary Assault Systems",
+      "title": "In From the Night",
+      "part": null,
+      "confidence": "medium",
+      "note": "Sin verificar",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "17 - Dona Sumer - I Fel Love.seq",
+      "song_id": "i-feel-love",
+      "artist": "Donna Summer",
+      "title": "I Feel Love",
+      "part": null,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "18 - The Proodigy - Weather Experiense.seq",
+      "song_id": "weather-experience",
+      "artist": "The Prodigy",
+      "title": "Weather Experience",
+      "part": null,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "19 - Stamatis Stabos - Acid Trinity.seq",
+      "song_id": "acid-trinity",
+      "artist": "Stamatis Thabos",
+      "title": "Acid Trinity",
+      "part": null,
+      "confidence": "medium",
+      "note": "Probable tema propio del autor de la coleccion",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "20 - Hardflor - Acpeerience.seq",
+      "song_id": "acperience",
+      "artist": "Hardfloor",
+      "title": "Acperience",
+      "part": null,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "21 - DJ Miasjah & DJ Timm - Acces.seq",
+      "song_id": "access",
+      "artist": "DJ Misjah & DJ Tim",
+      "title": "Access",
+      "part": null,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "22 - Unions Jack - Two Full Mons and a Trout.seq",
+      "song_id": "two-full-moons-and-a-trout",
+      "artist": "Union Jack",
+      "title": "Two Full Moons and a Trout",
+      "part": null,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "23 - Publlic Energy - Thre O Thre.seq",
+      "song_id": "three-o-three",
+      "artist": "Public Energy",
+      "title": "Three 'O Three",
+      "part": null,
+      "confidence": "medium",
+      "note": "Sin verificar",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "24 - Underground Ressistance - The Seawoolf.seq",
+      "song_id": "the-seawolf",
+      "artist": "Underground Resistance",
+      "title": "The Seawolf",
+      "part": null,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "25 - Loochi - London Acid City.seq",
+      "song_id": "london-acid-city",
+      "artist": "Lochi (Chris Liberator & Laurie Immersion)",
+      "title": "London Acid City",
+      "part": null,
+      "confidence": "confirmed",
+      "note": "Routemaster Records, 1996",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "26 - Pepee Deluxe - Big Mufff.seq",
+      "song_id": "big-muff",
+      "artist": "Pepe Deluxe",
+      "title": "Big Muff",
+      "part": null,
+      "confidence": "low",
+      "note": "Sin verificar",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "27 - Emanuel Top - Rubycoon.seq",
+      "song_id": "rubycoon",
+      "artist": "Emanuel Top",
+      "title": "Rubycoon",
+      "part": null,
+      "confidence": "low",
+      "note": "Titulo original sin verificar",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "28 - Charanji Sing- Teen Ragas.seq",
+      "song_id": "ten-ragas",
+      "artist": "Charanjit Singh",
+      "title": "Synthesizing: Ten Ragas to a Disco Beat",
+      "part": null,
+      "confidence": "medium",
+      "note": "Album (1982); la pista concreta no esta identificada",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "29 - Armandow - Downfal.seq",
+      "song_id": "downfall",
+      "artist": "Armando",
+      "title": "Downfall",
+      "part": null,
+      "confidence": "medium",
+      "note": "Sin verificar",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "30 - Wody McBride - The Birdmaan.seq",
+      "song_id": "the-birdman",
+      "artist": "Woody McBride",
+      "title": "The Birdman",
+      "part": null,
+      "confidence": "medium",
+      "note": "Sin verificar",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "31 - Eurytmics - Swet Dreams 1.seq",
+      "song_id": "sweet-dreams",
+      "artist": "Eurythmics",
+      "title": "Sweet Dreams (Are Made of This)",
+      "part": 1,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "32 - Eurytmics - Swet Dreams 2.seq",
+      "song_id": "sweet-dreams",
+      "artist": "Eurythmics",
+      "title": "Sweet Dreams (Are Made of This)",
+      "part": 2,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "33- Pink Flloyd - 0n the Run.seq",
+      "song_id": "on-the-run",
+      "artist": "Pink Floyd",
+      "title": "On the Run",
+      "part": null,
+      "confidence": "high",
+      "note": "",
+      "source_group": "thabos-collection"
+    },
+    {
+      "file": "Seven Nation Acid (Part 1).seq",
+      "song_id": "seven-nation-army",
+      "artist": "The White Stripes (version acid)",
+      "title": "Seven Nation Army",
+      "part": 1,
+      "confidence": "medium",
+      "note": "Deducido del titulo; arreglo de autor desconocido",
+      "source_group": "seven-nation-acid"
+    },
+    {
+      "file": "Seven Nation Acid (Part 2).seq",
+      "song_id": "seven-nation-army",
+      "artist": "The White Stripes (version acid)",
+      "title": "Seven Nation Army",
+      "part": 2,
+      "confidence": "medium",
+      "note": "Deducido del titulo; arreglo de autor desconocido",
+      "source_group": "seven-nation-acid"
+    },
+    {
+      "file": "Seven Nation Acid (Part 3).seq",
+      "song_id": "seven-nation-army",
+      "artist": "The White Stripes (version acid)",
+      "title": "Seven Nation Army",
+      "part": 3,
+      "confidence": "medium",
+      "note": "Deducido del titulo; arreglo de autor desconocido",
+      "source_group": "seven-nation-acid"
+    },
+    {
+      "file": "Seven Nation Acid (Part 4).seq",
+      "song_id": "seven-nation-army",
+      "artist": "The White Stripes (version acid)",
+      "title": "Seven Nation Army",
+      "part": 4,
+      "confidence": "medium",
+      "note": "Deducido del titulo; arreglo de autor desconocido",
+      "source_group": "seven-nation-acid"
+    },
+    {
+      "file": "Seven Nation Acid (Part 5).seq",
+      "song_id": "seven-nation-army",
+      "artist": "The White Stripes (version acid)",
+      "title": "Seven Nation Army",
+      "part": 5,
+      "confidence": "medium",
+      "note": "Deducido del titulo; arreglo de autor desconocido",
+      "source_group": "seven-nation-acid"
+    },
+    {
+      "file": "Seven Nation Acid (Part 6).seq",
+      "song_id": "seven-nation-army",
+      "artist": "The White Stripes (version acid)",
+      "title": "Seven Nation Army",
+      "part": 6,
+      "confidence": "medium",
+      "note": "Deducido del titulo; arreglo de autor desconocido",
+      "source_group": "seven-nation-acid"
+    },
+    {
+      "file": "Seven Nation Acid (Part 7).seq",
+      "song_id": "seven-nation-army",
+      "artist": "The White Stripes (version acid)",
+      "title": "Seven Nation Army",
+      "part": 7,
+      "confidence": "medium",
+      "note": "Deducido del titulo; arreglo de autor desconocido",
+      "source_group": "seven-nation-acid"
+    },
+    {
+      "file": "access-20.p1.seq",
+      "song_id": "access",
+      "artist": "DJ Misjah & DJ Tim",
+      "title": "Access",
+      "part": 1,
+      "confidence": "high",
+      "note": "",
+      "source_group": "slug"
+    },
+    {
+      "file": "are-you-there-44.p1.seq",
+      "song_id": "are-you-there",
+      "artist": "Josh Wink (?)",
+      "title": "Are You There?",
+      "part": 1,
+      "confidence": "low",
+      "note": "No confirmado por busqueda web",
+      "source_group": "slug"
+    },
+    {
+      "file": "claustrophobic-sting-43.p1.seq",
+      "song_id": "claustrophobic-sting",
+      "artist": "The Prodigy",
+      "title": "Claustrophobic Sting",
+      "part": 1,
+      "confidence": "high",
+      "note": "",
+      "source_group": "slug"
+    },
+    {
+      "file": "confusion-19.p1.seq",
+      "song_id": "confusion",
+      "artist": "New Order / The Pump Panel",
+      "title": "Confusion (Blade Theme)",
+      "part": 1,
+      "confidence": "high",
+      "note": "",
+      "source_group": "slug"
+    },
+    {
+      "file": "eveybody-needs-a-303-17.p1.seq",
+      "song_id": "everybody-needs-a-303",
+      "artist": "Fatboy Slim",
+      "title": "Everybody Needs a 303",
+      "part": 1,
+      "confidence": "high",
+      "note": "",
+      "source_group": "slug"
+    },
+    {
+      "file": "funalogue-35.p1.seq",
+      "song_id": "funalogue",
+      "artist": "Hardfloor",
+      "title": "Funalogue",
+      "part": 1,
+      "confidence": "confirmed",
+      "note": "Harthouse, 1994",
+      "source_group": "slug"
+    },
+    {
+      "file": "funalogue-35.p2.seq",
+      "song_id": "funalogue",
+      "artist": "Hardfloor",
+      "title": "Funalogue",
+      "part": 2,
+      "confidence": "confirmed",
+      "note": "Harthouse, 1994",
+      "source_group": "slug"
+    },
+    {
+      "file": "funalogue-35.p3.seq",
+      "song_id": "funalogue",
+      "artist": "Hardfloor",
+      "title": "Funalogue",
+      "part": 3,
+      "confidence": "confirmed",
+      "note": "Harthouse, 1994",
+      "source_group": "slug"
+    },
+    {
+      "file": "funalogue-35.p4.seq",
+      "song_id": "funalogue",
+      "artist": "Hardfloor",
+      "title": "Funalogue",
+      "part": 4,
+      "confidence": "confirmed",
+      "note": "Harthouse, 1994",
+      "source_group": "slug"
+    },
+    {
+      "file": "higher-state-of-consciousness-1.p1.seq",
+      "song_id": "higher-state",
+      "artist": "Josh Wink",
+      "title": "Higher State of Consciousness",
+      "part": 1,
+      "confidence": "high",
+      "note": "",
+      "source_group": "slug"
+    },
+    {
+      "file": "i-feel-love-11.p1.seq",
+      "song_id": "i-feel-love",
+      "artist": "Donna Summer",
+      "title": "I Feel Love",
+      "part": 1,
+      "confidence": "high",
+      "note": "",
+      "source_group": "slug"
+    },
+    {
+      "file": "three-o-three-47.p1.seq",
+      "song_id": "three-o-three",
+      "artist": "Public Energy",
+      "title": "Three 'O Three",
+      "part": 1,
+      "confidence": "medium",
+      "note": "Sin verificar",
+      "source_group": "slug"
+    },
+    {
+      "file": "three-o-three-47.p2.seq",
+      "song_id": "three-o-three",
+      "artist": "Public Energy",
+      "title": "Three 'O Three",
+      "part": 2,
+      "confidence": "medium",
+      "note": "Sin verificar",
+      "source_group": "slug"
+    },
+    {
+      "file": "turkish-bazar-16.p1.seq",
+      "song_id": "turkish-bazar",
+      "artist": "Emanuel Top",
+      "title": "Turkish Bazar",
+      "part": 1,
+      "confidence": "high",
+      "note": "",
+      "source_group": "slug"
+    }
+  ]
+}

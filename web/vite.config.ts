@@ -5,32 +5,46 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   // Rutas relativas: sirve igual en GitHub Pages (subruta), localhost y Capacitor.
   base: "./",
-  server: { fs: { allow: [".."] } },
+  server: { allowedHosts: ["terminal.local"], fs: { allow: [".."] } },
   // Túnel ngrok para probar en el teléfono (`ngrok http 4173`).
-  preview: { allowedHosts: [".ngrok-free.app", ".ngrok-free.dev", ".ngrok.app", ".ngrok.io"] },
+  // acid.bnbandeo.com: dominio de producción detrás de nginx (ver deploy/).
+  preview: {
+    allowedHosts: [
+      ".ngrok-free.app",
+      ".ngrok-free.dev",
+      ".ngrok.app",
+      ".ngrok.io",
+      "acid.bnbandeo.com",
+    ],
+  },
   plugins: [
     preact(),
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: ["icon.svg"],
       manifest: {
-        name: "TD-3 Acid Patterns",
-        short_name: "TD-3",
+        name: "Acidlab 303",
+        short_name: "Acidlab 303",
         description: "Generador y editor de patrones ácidos para Behringer TD-3",
         lang: "es",
         start_url: ".",
         scope: ".",
         display: "standalone",
-        orientation: "portrait",
-        background_color: "#111111",
-        theme_color: "#111111",
+        background_color: "#0a0a0a",
+        theme_color: "#151515",
         icons: [
           { src: "icon-192.png", sizes: "192x192", type: "image/png" },
           { src: "icon-512.png", sizes: "512x512", type: "image/png" },
           { src: "icon-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
         ],
       },
-      workbox: { globPatterns: ["**/*.{js,css,html,svg,png,webmanifest}"] },
+      // PDF e imágenes de GUÍAS se abren navegando: sin la exclusión, el SW devolvería index.html.
+      // PDF e imágenes de GUÍAS van precacheados para leerlos sin conexión; el límite por defecto (2 MiB) los dejaría afuera.
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,svg,png,webmanifest,woff2,pdf,jpg,jpeg}"],
+        maximumFileSizeToCacheInBytes: 20 * 1024 * 1024,
+        navigateFallbackDenylist: [/\.(pdf|jpe?g|png)$/],
+      },
     }),
   ],
   test: { include: ["tests/**/*.test.ts"] },

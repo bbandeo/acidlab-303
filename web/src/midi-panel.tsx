@@ -1,6 +1,7 @@
 import { useState } from "preact/hooks";
 import type { Pattern, PatternKey } from "./domain";
-import { hex, midiFlagEnabled, midiSupported, openMidi, outputs, sendPattern, setMidiFlag } from "./midi";
+import { hex, midiSupported, openMidi, outputs, sendPattern } from "./midi";
+import { ActionRow, MenuNote, PrimaryButton, ValueRow } from "./panel/menu";
 
 interface Props {
   pattern: Pattern;
@@ -9,16 +10,12 @@ interface Props {
   onError: (e: unknown) => void;
 }
 
-/** Panel experimental: invisible salvo con ?experimental=midi o el toggle guardado. */
 export function MidiPanel({ pattern, patternKey, onMessage, onError }: Props) {
-  const [enabled, setEnabled] = useState(midiFlagEnabled);
   const [outs, setOuts] = useState<MIDIOutput[]>([]);
   const [outId, setOutId] = useState("");
   const [group, setGroup] = useState(0);
   const [slot, setSlot] = useState(0);
   const [last, setLast] = useState("");
-
-  if (!enabled) return null;
 
   async function connect() {
     try {
@@ -47,63 +44,32 @@ export function MidiPanel({ pattern, patternKey, onMessage, onError }: Props) {
     }
   }
 
+  const current = outs.find((o) => o.id === outId);
+
   return (
-    <section class="card experimental">
-      <h2>MIDI USB (experimental)</h2>
-      <p class="warn">
-        El SysEx no está verificado en un TD-3 real. Puede no funcionar o escribir en otro slot. Hacé backup en SynthTribe antes.
-      </p>
+    <div class="m-fill">
+      <MenuNote warn>SysEx experimental, no verificado en un TD-3 real. Puede no funcionar o escribir en otro slot. Hacé backup en SynthTribe antes de enviar.</MenuNote>
       {!midiSupported() ? (
-        <p class="muted">Este navegador no soporta Web MIDI (usá Chrome en Android).</p>
-      ) : (
-        <>
-          <div class="row wrap">
-            <button onClick={connect}>Conectar</button>
-            <select value={outId} onChange={(e) => setOutId(e.currentTarget.value)} disabled={!outs.length}>
-              {outs.map((o) => (
-                <option key={o.id} value={o.id}>
-                  {o.name ?? o.id}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div class="row">
-            <label>
-              Grupo
-              <select value={group} onChange={(e) => setGroup(Number(e.currentTarget.value))}>
-                {[0, 1, 2, 3].map((g) => (
-                  <option key={g} value={g}>
-                    {g + 1}
-                  </option>
-                ))}
+        <MenuNote>Este navegador no soporta Web MIDI (usá Chrome en Android).</MenuNote>
+      ) : (<>
+        <div class="m-list">
+          {outs.length === 0
+            ? <ActionRow label="Conectar" sub="Buscar salidas MIDI USB" onClick={() => void connect()} />
+            : <label class="m-row">
+              <span class="m-row-label">PUERTO</span>
+              <select class="m-select" value={outId} onChange={(e) => setOutId(e.currentTarget.value)}>
+                {outs.map((o) => <option key={o.id} value={o.id}>{o.name ?? o.id}</option>)}
               </select>
-            </label>
-            <label>
-              Slot
-              <select value={slot} onChange={(e) => setSlot(Number(e.currentTarget.value))}>
-                {Array.from({ length: 16 }, (_, s) => (
-                  <option key={s} value={s}>
-                    {s + 1}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <button class="primary" onClick={send} disabled={!outId}>
-              Enviar {patternKey}
-            </button>
-          </div>
-          {last && <pre class="hex">{last}</pre>}
-        </>
-      )}
-      <button
-        class="link small"
-        onClick={() => {
-          setMidiFlag(false);
-          setEnabled(false);
-        }}
-      >
-        Ocultar panel MIDI
-      </button>
-    </section>
+            </label>}
+          <ValueRow label="GRUPO" value={String(group + 1)} plain
+            onClick={() => setGroup((group + 1) % 4)} onPrev={() => setGroup((group + 3) % 4)} />
+          <ValueRow label="SLOT" value={String(slot + 1)} plain
+            onClick={() => setSlot((slot + 1) % 16)} onPrev={() => setSlot((slot + 15) % 16)} />
+        </div>
+        {last && <pre class="m-hex">{last}</pre>}
+        <div class="m-spacer" />
+        <PrimaryButton disabled={!current} onClick={send}>ENVIAR PATRÓN {patternKey}</PrimaryButton>
+      </>)}
+    </div>
   );
 }
